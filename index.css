@@ -8,11 +8,11 @@
     justify-content: space-between;
     border: 1px solid black;
 }
-.logo-container{
+/* .logo-container{
     height: 150px;
     width: 150px;
     vertical-align: middle;
-}
+} */
 .logo{
     width: 150px;
     height: 150px;
@@ -45,8 +45,6 @@
 
 }
 .res-card{
-    
-    height: 350px;
     width: 250px;
     background-color: #f0f0f0;
     padding: 5px;
