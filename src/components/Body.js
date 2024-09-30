@@ -1,64 +1,81 @@
 import ResCard from "./ResCard";
-import resList from "./utils/mockData";
-
-
+import { useEffect, useState } from "react";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
+  const [listOfRestaurants, setlistOfRestaurants] = useState([]);
+  const [filteredRestaurants, setfilteredRestaurants] = useState([]);
 
-    let listOfRestaurants = [
-    {
-        info: {
-        id: "150598",
-        name: "Begam Bazar Dosa",
-        cloudinaryImageId: "fm3rs3g6z7ibfhesmxnu",
-        costForTwo: "₹200 for two",
-        cuisines: ["Bakery", "Ice Cream", "Snacks", "Beverages"],
-        avgRating: 3.5,
-        sla: {
-          deliveryTime: 73,
-        }
-      }
-    },
-    {
-        info: {
-        id: "150597",
-        name: "Scoops Fast Food And Ice Cream",
-        cloudinaryImageId: "fm3rs3g6z7ibfhesmxnu",
-        costForTwo: "₹200 for two",
-        cuisines: ["Bakery", "Ice Cream", "Snacks", "Beverages"],
-        avgRating: 4,
-        sla: {
-          deliveryTime: 73,
-        }
-      }
-    },
-    {
-        info: {
-        id: "150599",
-        name: "kadak Chai",
-        cloudinaryImageId: "fm3rs3g6z7ibfhesmxnu",
-        costForTwo: "₹200 for two",
-        cuisines: ["Bakery", "Ice Cream", "Snacks", "Beverages"],
-        avgRating: 4.5,
-        sla: {
-          deliveryTime: 73,
-        }
-      }
-    }]
+  const [searchText, setsearchText] = useState("");
 
-    return (
-      <div className="body">
-        <button className="filter-btn" onClick={()=>{
-            listOfRestaurants = listOfRestaurants.filter((resinfo)=>resinfo.info.avgRating<4);
-            console.log(listOfRestaurants);
-        }}>Top rated Restaurants</button>
-        <div className="res-container">
-          {listOfRestaurants.map((restinfo) => (
-            <ResCard key={restinfo.info.id} resData={restinfo} />
-          ))}
-        </div>
-      </div>
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.406498&lng=78.47724389999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
+    // data.then((res)=>res.json()).then((json)=>console.log(json));
+    const json = await data.json();
+    console.log(json);
+    // Optional Chaining
+    setlistOfRestaurants(
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+    setfilteredRestaurants(
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
 
-  export default Body;
+  if (listOfRestaurants.length === 0) {
+    return <Shimmer />;
+  }
+
+  return (
+    <div className="body">
+      <div className="filter">
+        <div className="search">
+          <input
+            type="text"
+            className="search-box"
+            value={searchText}
+            onChange={(e) => {
+              setsearchText(e.target.value);
+            }}
+          />
+          <button
+            className="search-btn"
+            onClick={() => {
+              const filteredList = listOfRestaurants.filter((res) =>
+                res.info.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+              setfilteredRestaurants(filteredList);
+            }}
+          >
+            Search
+          </button>
+        </div>
+        <button
+          className="filter-btn"
+          onClick={() => {
+            const filteredRestaurants = listOfRestaurants.filter(
+              (resinfo) => resinfo.info.avgRating > 4.5
+            );
+            setfilteredRestaurants(filteredRestaurants);
+          }}
+        >
+          Top rated Restaurants
+        </button>
+      </div>
+
+      <div className="res-container">
+        {filteredRestaurants.map((restinfo) => (
+          <ResCard key={restinfo.info.id} resData={restinfo} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Body;
