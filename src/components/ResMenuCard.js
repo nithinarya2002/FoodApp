@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import { MENU_URL } from "../utils/constants";
+import useRestaurantInfo from "../utils/useRestaurantInfo";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const ResMenuCard = () => {
-  const [restInfo, setrestInfo] = useState(null);
   const { resId } = useParams();
 
-  useEffect(() => {
-    fetchRestaurantData();
-  }, []);
-
-  const fetchRestaurantData = async () => {
-    const data = await fetch(MENU_URL + resId);
-    const json = await data.json();
-    console.log(json);
-    setrestInfo(json.data);
-  };
-
+  const restInfo = useRestaurantInfo(resId);  // custom Hook helps in SRP(Single Responsibility Principle) and modularity.
+  const onlineStatus = useOnlineStatus();
+  
+  if (onlineStatus === false) return <h1>Looks like you are Offline! Please Check your internet connection</h1>;
   if (restInfo === null) return <Shimmer />;
 
   const { name, cuisines, costForTwoMessage } =
