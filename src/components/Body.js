@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import ResCardOpen from "./ResCardOpen";
 
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setfilteredRestaurants] = useState([]);
   const onlineStatus = useOnlineStatus();
   const [searchText, setsearchText] = useState("");
+
+  const OpenCard = ResCardOpen(ResCard);
 
   useEffect(() => {
     fetchData();
@@ -29,7 +32,10 @@ const Body = () => {
       json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
-  if(onlineStatus === false)return <h1>Looks like you are Offline! Please Check your internet connection</h1>;
+  if (onlineStatus === false)
+    return (
+      <h1>Looks like you are Offline! Please Check your internet connection</h1>
+    );
   if (listOfRestaurants.length === 0) {
     return <Shimmer />;
   }
@@ -72,8 +78,11 @@ const Body = () => {
       </div>
 
       <div className="res-container">
-        {filteredRestaurants.map((restinfo) => (
-          <Link key={restinfo.info.id} to = {"/restaurant/"+restinfo.info.id}><ResCard  resData={restinfo} /></Link>
+        {filteredRestaurants.map((restinfo,ind) => (
+          <Link key={restinfo.info.id} to={"/restaurant/" + restinfo.info.id}>
+            {restinfo.info.isOpen === true?<OpenCard resData = {restinfo}/>:<ResCard resData = {restinfo}/>}
+            {/* <ResCard resData={restinfo} /> */}
+          </Link>
         ))}
       </div>
     </div>
