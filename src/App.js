@@ -9,16 +9,22 @@ import Error from "./components/Error";
 import ResMenuCard from "./components/ResMenuCard";
 // import Grocery from "./components/Grocery";
 import { lazy } from "react";
+import UserContext from "./utils/UserContext";
+import {useState} from "react";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const Contact = lazy(()=>import("./components/Contact"));
+const nama = "Nithin Patil";
 
 const AppLayout = () => {
+  const [name,setName] = useState(nama);
   return (
+    <UserContext.Provider value = {{loggedInUser:name,setName}}>
     <div>
       <Header />
       <Outlet />
     </div>
+    </UserContext.Provider>
   );
 };
 

@@ -1,6 +1,6 @@
-import User from "./User";
 import UserClass from "./UserClass";
 import React from "react";
+import UserContext from "../utils/UserContext";
 
 class About extends React.Component {
   constructor() {
@@ -17,8 +17,12 @@ class About extends React.Component {
       <div>
         <h1>About Us</h1>
         <h2>Online Food Delivery App Partnered!</h2>
-        <UserClass />
         
+          <UserContext.Consumer>
+            {({ loggedInUser }) => <h2>{loggedInUser}</h2>}
+          </UserContext.Consumer>
+        
+        <UserClass />
       </div>
     );
   }

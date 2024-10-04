@@ -1,15 +1,18 @@
 import ResCard from "./ResCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import ResCardOpen from "./ResCardOpen";
+import UserContext from "../utils/UserContext";
+
 
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setfilteredRestaurants] = useState([]);
   const onlineStatus = useOnlineStatus();
   const [searchText, setsearchText] = useState("");
+  const {loggedInUser,setName}= useContext(UserContext);
 
   const OpenCard = ResCardOpen(ResCard);
 
@@ -76,6 +79,15 @@ const Body = () => {
           >
             Top rated Restaurants
           </button>
+          <label className="mx-2">ChangeUserName: </label>
+          <input
+            type="text"
+            className="border-2 border-solid border-black"
+            value={loggedInUser}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
         </div>
       </div>
 
