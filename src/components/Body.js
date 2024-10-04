@@ -42,18 +42,18 @@ const Body = () => {
 
   return (
     <div className="body">
-      <div className="filter">
-        <div className="search">
+      <div className="flex items-center">
+        <div className="py-4">
           <input
             type="text"
-            className="search-box"
+            className="border-2 border-solid border-black"
             value={searchText}
             onChange={(e) => {
               setsearchText(e.target.value);
             }}
           />
           <button
-            className="search-btn"
+            className="mx-2 bg-green-300 px-2 py-[2px] rounded-sm"
             onClick={() => {
               const filteredList = listOfRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -64,23 +64,29 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            const filteredRestaurants = listOfRestaurants.filter(
-              (resinfo) => resinfo.info.avgRating > 4.5
-            );
-            setfilteredRestaurants(filteredRestaurants);
-          }}
-        >
-          Top rated Restaurants
-        </button>
+        <div>
+          <button
+            className="bg-yellow-200 px-4 py-1  rounded-lg"
+            onClick={() => {
+              const filteredRestaurants = listOfRestaurants.filter(
+                (resinfo) => resinfo.info.avgRating > 4.5
+              );
+              setfilteredRestaurants(filteredRestaurants);
+            }}
+          >
+            Top rated Restaurants
+          </button>
+        </div>
       </div>
 
-      <div className="res-container">
-        {filteredRestaurants.map((restinfo,ind) => (
+      <div className="flex flex-wrap">
+        {filteredRestaurants.map((restinfo, ind) => (
           <Link key={restinfo.info.id} to={"/restaurant/" + restinfo.info.id}>
-            {restinfo.info.isOpen === true?<OpenCard resData = {restinfo}/>:<ResCard resData = {restinfo}/>}
+            {restinfo.info.isOpen === true ? (
+              <OpenCard resData={restinfo} />
+            ) : (
+              <ResCard resData={restinfo} />
+            )}
             {/* <ResCard resData={restinfo} /> */}
           </Link>
         ))}
