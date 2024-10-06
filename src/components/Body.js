@@ -13,6 +13,7 @@ const Body = () => {
   const onlineStatus = useOnlineStatus();
   const [searchText, setsearchText] = useState("");
   const {loggedInUser,setName}= useContext(UserContext);
+  
 
   const OpenCard = ResCardOpen(ResCard);
 

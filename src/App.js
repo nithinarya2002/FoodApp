@@ -10,21 +10,27 @@ import ResMenuCard from "./components/ResMenuCard";
 // import Grocery from "./components/Grocery";
 import { lazy } from "react";
 import UserContext from "./utils/UserContext";
-import {useState} from "react";
+import { useState } from "react";
+import { Provider } from "react-redux";
+import cartStore from "./utils/cartStore";
+import Cart from "./components/Cart";
+
 
 const Grocery = lazy(() => import("./components/Grocery"));
-const Contact = lazy(()=>import("./components/Contact"));
+const Contact = lazy(() => import("./components/Contact"));
 const nama = "Nithin Patil";
 
 const AppLayout = () => {
-  const [name,setName] = useState(nama);
+  const [name, setName] = useState(nama);
   return (
-    <UserContext.Provider value = {{loggedInUser:name,setName}}>
-    <div>
-      <Header />
-      <Outlet />
-    </div>
-    </UserContext.Provider>
+    <Provider store={cartStore}>
+      <UserContext.Provider value={{ loggedInUser: name, setName }}>
+        <div>
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -43,9 +49,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <Suspense fallback={<h1>Loading.....</h1>}>
-        <Contact />
-      </Suspense>,
+        element: (
+          <Suspense fallback={<h1>Loading.....</h1>}>
+            <Contact />
+          </Suspense>
+        ),
       },
       {
         path: "/grocery",
@@ -60,6 +68,10 @@ const appRouter = createBrowserRouter([
         path: "/restaurant/:resId",
         element: <ResMenuCard />,
       },
+      {
+        path: "/cart",
+        element: <Cart />,
+      }
     ],
     errorElement: <Error />,
   },

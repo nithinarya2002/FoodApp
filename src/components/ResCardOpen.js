@@ -1,4 +1,4 @@
-import ResCard from "./ResCard"
+// import ResCard from "./ResCard"
 
 const ResCardOpen = (ResCard)=>{
     return (props)=>{
