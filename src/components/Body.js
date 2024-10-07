@@ -6,14 +6,12 @@ import useOnlineStatus from "../utils/useOnlineStatus";
 import ResCardOpen from "./ResCardOpen";
 import UserContext from "../utils/UserContext";
 
-
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setfilteredRestaurants] = useState([]);
   const onlineStatus = useOnlineStatus();
   const [searchText, setsearchText] = useState("");
-  const {loggedInUser,setName}= useContext(UserContext);
-  
+  const { loggedInUser, setName } = useContext(UserContext);
 
   const OpenCard = ResCardOpen(ResCard);
 
@@ -36,28 +34,32 @@ const Body = () => {
       json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
+
+
   if (onlineStatus === false)
     return (
       <h1>Looks like you are Offline! Please Check your internet connection</h1>
     );
   if (listOfRestaurants.length === 0) {
+    console.log("in");
     return <Shimmer />;
   }
+  // console.log(listOfRestaurants.length,"ch");
 
   return (
-    <div className="body">
-      <div className="flex items-center">
-        <div className="py-4">
+    <div className = "">
+      <div className="flex flex-col justify-center items-center">
+        <div className="py-4 mt-8">
           <input
             type="text"
-            className="border-2 border-solid border-black"
+            className="border-2 border-solid border-gray-200 rounded-lg h-9 w-64"
             value={searchText}
             onChange={(e) => {
               setsearchText(e.target.value);
             }}
           />
           <button
-            className="mx-2 bg-green-300 px-2 py-[2px] rounded-sm"
+            className="mx-2 bg-black text-white px-6 py-[4px] rounded-lg"
             onClick={() => {
               const filteredList = listOfRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -70,37 +72,28 @@ const Body = () => {
         </div>
         <div>
           <button
-            className="bg-yellow-200 px-4 py-1  rounded-lg"
+            className="bg-black text-white px-6 py-[8px]  rounded-lg"
             onClick={() => {
               const filteredRestaurants = listOfRestaurants.filter(
-                (resinfo) => resinfo.info.avgRating > 4.5
+                (resinfo) => resinfo.info.avgRating > 4
               );
               setfilteredRestaurants(filteredRestaurants);
             }}
           >
             Top rated Restaurants
           </button>
-          <label className="mx-2">ChangeUserName: </label>
-          <input
-            type="text"
-            className="border-2 border-solid border-black"
-            value={loggedInUser}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
         </div>
       </div>
 
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap w-11/12 mx-auto mt-8 border border-solid ">
         {filteredRestaurants.map((restinfo, ind) => (
           <Link key={restinfo.info.id} to={"/restaurant/" + restinfo.info.id}>
-            {restinfo.info.isOpen === true ? (
+            {/* {restinfo.info.isOpen === true ? (
               <OpenCard resData={restinfo} />
             ) : (
               <ResCard resData={restinfo} />
-            )}
-            {/* <ResCard resData={restinfo} /> */}
+            )} */}
+            <ResCard resData={restinfo} />
           </Link>
         ))}
       </div>

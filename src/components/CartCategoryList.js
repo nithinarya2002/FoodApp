@@ -3,7 +3,7 @@ const CartCategoryList = ({itemCard}) => {
     console.log(itemCard);
     return (
       <div
-        className="border border-b-gray-300 flex p-2"
+        className="border border-b-gray-300 flex p-2 mt-4"
       >
         <div className="w-10/12">
           <p className="p-2 font-bold text-[15px]">

@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import About from "./components/About";
 // import Contact from "./components/Contact";
 import Error from "./components/Error";
-import ResMenuCard from "./components/ResMenuCard";
+// import ResMenuCard from "./components/ResMenuCard";
 // import Grocery from "./components/Grocery";
 import { lazy } from "react";
 import UserContext from "./utils/UserContext";
@@ -18,13 +18,13 @@ import Cart from "./components/Cart";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const Contact = lazy(() => import("./components/Contact"));
-const nama = "Nithin Patil";
+const ResMenuCard = lazy(()=>import("./components/ResMenuCard") )
 
 const AppLayout = () => {
-  const [name, setName] = useState(nama);
+  const [userInfo, setUserInfo] = useState({});
   return (
     <Provider store={cartStore}>
-      <UserContext.Provider value={{ loggedInUser: name, setName }}>
+      <UserContext.Provider value={{ loggedInUserInfo: userInfo, setUserInfo }}>
         <div>
           <Header />
           <Outlet />
@@ -66,7 +66,11 @@ const appRouter = createBrowserRouter([
       //Colon indicates dynamic path
       {
         path: "/restaurant/:resId",
-        element: <ResMenuCard />,
+        element: (
+          <Suspense fallback={<h1>Loading.....</h1>}>
+            <ResMenuCard />
+          </Suspense>
+        ),
       },
       {
         path: "/cart",

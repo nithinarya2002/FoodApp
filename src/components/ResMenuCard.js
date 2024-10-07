@@ -4,6 +4,7 @@ import useRestaurantInfo from "../utils/useRestaurantInfo";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import ResCategory from "./ResCategory";
 import {useState} from 'react';
+import ShimmerMenuContainer from "./ShimmerMenuContainer";
 
 const ResMenuCard = () => {
   const { resId } = useParams();
@@ -17,7 +18,7 @@ const ResMenuCard = () => {
     return (
       <h1>Looks like you are Offline! Please Check your internet connection</h1>
     );
-  if (restInfo === null) return <Shimmer />;
+  if (restInfo === null) return <ShimmerMenuContainer />;
 
   const { name, cuisines, costForTwoMessage } =
     restInfo?.cards[2]?.card?.card?.info;
