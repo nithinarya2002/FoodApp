@@ -3,59 +3,47 @@ import { useParams } from "react-router-dom";
 import useRestaurantInfo from "../utils/useRestaurantInfo";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import ResCategory from "./ResCategory";
-import {useState} from 'react';
+import { useState } from 'react';
 import ShimmerMenuContainer from "./ShimmerMenuContainer";
 
 const ResMenuCard = () => {
   const { resId } = useParams();
-
-  const [showIndex, setShowIndex] = useState(null);
-
-  const restInfo = useRestaurantInfo(resId); // custom Hook helps in SRP(Single Responsibility Principle) and modularity.
+  // const [showIndex, setShowIndex] = useState(null);
+  const restInfo = useRestaurantInfo(resId); // custom Hook for modularity
   const onlineStatus = useOnlineStatus();
 
   if (onlineStatus === false)
     return (
-      <h1>Looks like you are Offline! Please Check your internet connection</h1>
+      <h1 className="text-center text-xl mt-4">Looks like you are Offline! Please check your internet connection.</h1>
     );
   if (restInfo === null) return <ShimmerMenuContainer />;
 
-  const { name, cuisines, costForTwoMessage } =
-    restInfo?.cards[2]?.card?.card?.info;
+  const { name, cuisines, costForTwoMessage } = restInfo?.cards[2]?.card?.card?.info;
 
-  // const itemCards =
-  //   restInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card
-  //     ?.itemCards;
-  // console.log(itemCards);
-
-  const categories =
-    restInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
-      (category) => {
-        return (
-          category?.card?.card?.["@type"] ===
-          "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
-        );
-      }
-    );
-  console.log(categories);
+  const categories = restInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+    (category) => {
+      return (
+        category?.card?.card?.["@type"] ===
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+      );
+    }
+  );
 
   return (
-    <div className="w-6/12 m-auto">
-      <div className="text-center font-bold text-2xl">
-        <h1 className="">{name}</h1>
-        <p>
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center font-bold text-2xl sm:text-3xl md:text-4xl my-4">
+        <h1>{name}</h1>
+        <p className="text-lg sm:text-xl md:text-2xl">
           {cuisines.join(", ")} <span>{costForTwoMessage}</span>
         </p>
       </div>
-      <div className=" ">
+      <div>
         {categories.map((category, index) => (
           <ResCategory
             key={category?.card?.card?.title}
             category={category}
-            show={index === showIndex ? true : false}
-            setShowIndex={() => {
-              setShowIndex(index);
-            }}
+            // show={index === showIndex}
+            // setShowIndex={() => setShowIndex(index)}
           />
         ))}
       </div>

@@ -3,7 +3,6 @@ import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
-import ResCardOpen from "./ResCardOpen";
 import UserContext from "../utils/UserContext";
 
 const Body = () => {
@@ -13,41 +12,42 @@ const Body = () => {
   const [searchText, setsearchText] = useState("");
   const { loggedInUser, setName } = useContext(UserContext);
 
-  const OpenCard = ResCardOpen(ResCard);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.406498&lng=78.47724389999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-    // data.then((res)=>res.json()).then((json)=>console.log(json));
-    const json = await data.json();
-    console.log(json);
-    // Optional Chaining
-    setlistOfRestaurants(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setfilteredRestaurants(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-  };
+
+    const fetchData = async () => {
+      const data = await fetch(
+       `https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.3850&lng=78.4867&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`
+      );
+      // data.then((res)=>res.json()).then((json)=>console.log(json));
+      const json = await data.json();
+      console.log(json);
+      // Optional Chaining
+      setlistOfRestaurants(
+        json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants
+      );
+      setfilteredRestaurants(
+        json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants
+      );
+    };
 
 
   if (onlineStatus === false)
     return (
       <h1>Looks like you are Offline! Please Check your internet connection</h1>
     );
-  if (listOfRestaurants.length === 0) {
-    console.log("in");
+
+  if (!listOfRestaurants || listOfRestaurants.length === 0) {
     return <Shimmer />;
   }
-  // console.log(listOfRestaurants.length,"ch");
 
   return (
-    <div className = "">
+    <div className="">
       <div className="flex flex-col justify-center items-center">
         <div className="py-4 mt-8">
           <input
@@ -85,7 +85,7 @@ const Body = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-11/12 mx-auto mt-8 border border-solid ">
+      <div className="flex flex-wrap w-11/12 mx-auto mt-8 border border-solid justify-evenly">
         {filteredRestaurants.map((restinfo, ind) => (
           <Link key={restinfo.info.id} to={"/restaurant/" + restinfo.info.id}>
             {/* {restinfo.info.isOpen === true ? (

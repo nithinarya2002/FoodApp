@@ -10,15 +10,13 @@ import Error from "./components/Error";
 // import Grocery from "./components/Grocery";
 import { lazy } from "react";
 import UserContext from "./utils/UserContext";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Provider } from "react-redux";
 import cartStore from "./utils/cartStore";
 import Cart from "./components/Cart";
 
-
-const Grocery = lazy(() => import("./components/Grocery"));
 const Contact = lazy(() => import("./components/Contact"));
-const ResMenuCard = lazy(()=>import("./components/ResMenuCard") )
+const ResMenuCard = lazy(() => import("./components/ResMenuCard"));
 
 const AppLayout = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -55,14 +53,7 @@ const appRouter = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "/grocery",
-        element: (
-          <Suspense fallback={<h1>Loading.....</h1>}>
-            <Grocery />
-          </Suspense>
-        ),
-      },
+      
       //Colon indicates dynamic path
       {
         path: "/restaurant/:resId",
@@ -75,7 +66,7 @@ const appRouter = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
-      }
+      },
     ],
     errorElement: <Error />,
   },

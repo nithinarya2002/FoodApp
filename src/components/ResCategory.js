@@ -1,20 +1,23 @@
 import { useState } from "react";
 import CategoryList from "./CategoryList";
-const ResCategory = ({ category, show, setShowIndex }) => {
 
+const ResCategory = ({ category}) => {
+
+  const [show,setShow] = useState(false);
   const handleClick = () => {
-    setShowIndex();
+    setShow(!show);
   };
+
   return (
     <div
-      className="bg-gray-200 my-2 shadow-lg cursor-pointer"
-      onClick={handleClick}
+      className="bg-gray-200 my-2 shadow-lg cursor-pointer rounded-md"
+      
     >
-      <div className="flex justify-between py-4 pl-1">
-        <p className="font-bold text-xl">
+      <div className="flex justify-between items-center py-4 px-2" onClick={handleClick}>
+        <p className="font-bold text-lg sm:text-xl">
           {category.card.card.title} ({category?.card?.card?.itemCards?.length})
         </p>
-        <span>🔽</span>
+        <span className="text-xl">{show ? "🔼" : "🔽"}</span>
       </div>
       {show && (
         <CategoryList
@@ -26,3 +29,4 @@ const ResCategory = ({ category, show, setShowIndex }) => {
 };
 
 export default ResCategory;
+
